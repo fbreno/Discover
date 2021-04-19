@@ -9,11 +9,11 @@ const Modal = {
 
 const Storage = {
     get(){
-        return JSON.parse(localStorage.getItem("dev.finances:transactions"))|| []
+        return JSON.parse(localStorage.getItem("bd"))|| []
     },
     
     set(transactions){
-        localStorage.setItem("dev.finances:transactions",JSON.stringify(transactions))
+        localStorage.setItem("bd",JSON.stringify(transactions))
     }
 }
 
@@ -142,7 +142,7 @@ const Form = {
     validateFields(){
         const{description,amount,date} = Form.getValues()
 
-        if(description.trim() || amount.trim() || date.trim()){
+        if(description.trim() === "" || amount.trim()==="" || date.trim()===""){
             throw new Error("Por favor, preencha todos os campos");
         }
     },
@@ -150,9 +150,9 @@ const Form = {
     formatValues(){
         let {description,amount,date} = Form.getValues()
         
-        amount = amount.Utils.formatAmount()
+        amount = Utils.formatAmount(amount)
         
-        date = date.Utils.formatDate()
+        date = Utils.formatDate(date)
 
         return{description,amount,date}
 
@@ -177,6 +177,7 @@ const Form = {
             Form.saveTransaction(transaction)
             Form.clearFields()
             Modal.open()
+            
 
         } catch (error) {
             alert(error.message)
